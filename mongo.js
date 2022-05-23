@@ -393,8 +393,8 @@ module.exports = {
   },
 
   getRoutes: async function (user) {
-    const res = await User.findOne({ user: user }, { routes: 1 })
-    return res[0]
+    const res = await User.findOne({ user: user }, { routes: 1, _id: 0 })
+    return res.routes
   },
 
   addCustomSession: async function (routeID, user) {

@@ -5,6 +5,7 @@ const response = require('./response')
 const bodyParser = require('body-parser')
 const utility = require('./utility')
 const url = require('url')
+const { dataJson } = require('./response')
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true, limit: '25mb' }))
@@ -202,8 +203,8 @@ app.get('/device_status', async (req, res) => {
 })
 
 app.get('/routes', async (req, res) => {
-  const res = mongo.getRoutes(req.query.user)
-  
+  const result = await mongo.getRoutes(req.query.user)
+  res.json(dataJson(200, result))
 })
 
 async function close (ws) {
@@ -213,7 +214,7 @@ async function close (ws) {
 
 wss.on('connection', async function connection (ws, req) {
   const path = url.parse(req.url, true).path
-  if (path == '/session') {
+  if (path === '/session') {
     sessionSocket(ws, req)
   } else {
     customRouteSocket(ws, req)
