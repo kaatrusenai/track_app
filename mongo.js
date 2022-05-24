@@ -61,7 +61,9 @@ const customSessionDataSchema = mongoose.Schema(
     gy: Number,
     gz: Number,
     lat: Number,
-    lng: Number
+    lng: Number,
+    label: String,
+    timestamp: Number
   },
   {
     autoCreate: false,
@@ -80,7 +82,7 @@ const customSessionSchema = mongoose.Schema(
   },
   {
     autoCreate: false,
-    autoIndex: false
+    autoIndex: true
   }
 )
 
@@ -115,6 +117,10 @@ module.exports = {
 
   user: function () {
     return User
+  },
+
+  session: function () {
+    return CustomSession
   },
 
   connect: async function () {
@@ -398,19 +404,30 @@ module.exports = {
   },
 
   addCustomSession: async function (routeID, user) {
-    const customSession = CustomSession(
-      {
-        routeID: routeID,
-        user: user
-      }
-    )
-    await customSession.save()
+    try {
+      const customSession = CustomSession(
+        {
+          routeID: routeID,
+          user: user
+        }
+      )
+      await customSession.save()
+    } catch {
+
+    }
   },
 
   addCustomSessionData: async function (routeID, data) {
     const customSession = await CustomSession.findOne({ routeID: routeID })
     customSession.data.push(CustomSessionData(data))
     console.log(data)
+    await customSession.save()
+  },
+
+  endCustomSession: async function (routeID) {
+    const customSession = await CustomSession.findOne({ routeID: routeID })
+    customSession.ended = timestamp.toISOString()
+    customSession.status = 'closed'
     await customSession.save()
   }
 

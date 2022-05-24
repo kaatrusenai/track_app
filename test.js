@@ -1,27 +1,27 @@
-const mongo = require("./mongo");
+const mongo = require('./mongo')
 
-async function well() {
-  await mongo.connect();
-  doc = await mongo.user().findOne({"username": "user1"})
+async function well () {
+  await mongo.connect()
+  const doc = await mongo.user().findOne({ username: 'user1' })
   doc.routes.push({
-    "type": "FeatureCollection",
-    "name": "Directions from Coconut Garden, Navy Nagar, TIFR, Old Navy Nagar, Colaba, Mumbai, Maharashtra to Chhatrapati Shivaji Maharaj Terminus, Chhatrapati Shivaji Terminus Area, Fort, Mumbai, Maharashtra",
-    "crs": {
-      "type": "name",
-      "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" }
+    type: 'FeatureCollection',
+    name: 'Directions from Coconut Garden, Navy Nagar, TIFR, Old Navy Nagar, Colaba, Mumbai, Maharashtra to Chhatrapati Shivaji Maharaj Terminus, Chhatrapati Shivaji Terminus Area, Fort, Mumbai, Maharashtra',
+    crs: {
+      type: 'name',
+      properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' }
     },
-    "features": [
+    features: [
       {
-        "type": "Feature",
-        "properties": {
-          "Name": "Directions from Coconut Garden, Navy Nagar, TIFR, Old Navy Nagar, Colaba, Mumbai, Maharashtra to Chhatrapati Shivaji Maharaj Terminus, Chhatrapati Shivaji Terminus Area, Fort, Mumbai, Maharashtra",
-          "tessellate": 1,
-          "extrude": 0,
-          "visibility": -1
+        type: 'Feature',
+        properties: {
+          Name: 'Directions from Coconut Garden, Navy Nagar, TIFR, Old Navy Nagar, Colaba, Mumbai, Maharashtra to Chhatrapati Shivaji Maharaj Terminus, Chhatrapati Shivaji Terminus Area, Fort, Mumbai, Maharashtra',
+          tessellate: 1,
+          extrude: 0,
+          visibility: -1
         },
-        "geometry": {
-          "type": "LineString",
-          "coordinates": [
+        geometry: {
+          type: 'LineString',
+          coordinates: [
             [72.80418, 18.90448, 0.0],
             [72.80418, 18.90461, 0.0],
             [72.80419, 18.90471, 0.0],
@@ -843,139 +843,145 @@ async function well() {
         }
       },
       {
-        "type": "Feature",
-        "properties": {
-          "Name": "Coconut Garden, Navy Nagar, TIFR, Old Navy Nagar, Colaba, Mumbai, Maharashtra",
-          "tessellate": -1,
-          "extrude": 0,
-          "visibility": -1
+        type: 'Feature',
+        properties: {
+          Name: 'Coconut Garden, Navy Nagar, TIFR, Old Navy Nagar, Colaba, Mumbai, Maharashtra',
+          tessellate: -1,
+          extrude: 0,
+          visibility: -1
         },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [72.8041767, 18.9044799, 0.0]
+        geometry: {
+          type: 'Point',
+          coordinates: [72.8041767, 18.9044799, 0.0]
         }
       },
       {
-        "type": "Feature",
-        "properties": {
-          "Name": "Kajal Properties, Colaba, Mumbai, Maharashtra",
-          "tessellate": -1,
-          "extrude": 0,
-          "visibility": -1
+        type: 'Feature',
+        properties: {
+          Name: 'Kajal Properties, Colaba, Mumbai, Maharashtra',
+          tessellate: -1,
+          extrude: 0,
+          visibility: -1
         },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [72.8176025, 18.916967, 0.0]
+        geometry: {
+          type: 'Point',
+          coordinates: [72.8176025, 18.916967, 0.0]
         }
       },
       {
-        "type": "Feature",
-        "properties": {
-          "Name": "Reliance Industries Ltd, Nariman Point, Mumbai, Maharashtra",
-          "tessellate": -1,
-          "extrude": 0,
-          "visibility": -1
+        type: 'Feature',
+        properties: {
+          Name: 'Reliance Industries Ltd, Nariman Point, Mumbai, Maharashtra',
+          tessellate: -1,
+          extrude: 0,
+          visibility: -1
         },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [72.8229096, 18.9247236, 0.0]
+        geometry: {
+          type: 'Point',
+          coordinates: [72.8229096, 18.9247236, 0.0]
         }
       },
       {
-        "type": "Feature",
-        "properties": {
-          "Name": "Indian Institute Of Geomagnetism, Nanabhai Moos Marg, Navy Nagar, Colaba, Mumbai, Maharashtra",
-          "tessellate": -1,
-          "extrude": 0,
-          "visibility": -1
+        type: 'Feature',
+        properties: {
+          Name: 'Indian Institute Of Geomagnetism, Nanabhai Moos Marg, Navy Nagar, Colaba, Mumbai, Maharashtra',
+          tessellate: -1,
+          extrude: 0,
+          visibility: -1
         },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [72.812849, 18.8971806, 0.0]
+        geometry: {
+          type: 'Point',
+          coordinates: [72.812849, 18.8971806, 0.0]
         }
       },
       {
-        "type": "Feature",
-        "properties": {
-          "Name": "Regional Meteorological Centre, next to Ashwini Naval Hospital, Navy Nagar, Colaba, Mumbai, Maharashtra",
-          "tessellate": -1,
-          "extrude": 0,
-          "visibility": -1
+        type: 'Feature',
+        properties: {
+          Name: 'Regional Meteorological Centre, next to Ashwini Naval Hospital, Navy Nagar, Colaba, Mumbai, Maharashtra',
+          tessellate: -1,
+          extrude: 0,
+          visibility: -1
         },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [72.8130988, 18.897742, 0.0]
+        geometry: {
+          type: 'Point',
+          coordinates: [72.8130988, 18.897742, 0.0]
         }
       },
       {
-        "type": "Feature",
-        "properties": {
-          "Name": "Naval Sailing Club, Pilot Bandar Road, Navy Nagar, Colaba, Mumbai, Maharashtra",
-          "tessellate": -1,
-          "extrude": 0,
-          "visibility": -1
+        type: 'Feature',
+        properties: {
+          Name: 'Naval Sailing Club, Pilot Bandar Road, Navy Nagar, Colaba, Mumbai, Maharashtra',
+          tessellate: -1,
+          extrude: 0,
+          visibility: -1
         },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [72.817355, 18.9032197, 0.0]
+        geometry: {
+          type: 'Point',
+          coordinates: [72.817355, 18.9032197, 0.0]
         }
       },
       {
-        "type": "Feature",
-        "properties": {
-          "Name": "Colaba woods garden, Sadhu Vaswani Marg, Ganesh Murti Nagar, Cuffe Parade, Mumbai, Maharashtra",
-          "tessellate": -1,
-          "extrude": 0,
-          "visibility": -1
+        type: 'Feature',
+        properties: {
+          Name: 'Colaba woods garden, Sadhu Vaswani Marg, Ganesh Murti Nagar, Cuffe Parade, Mumbai, Maharashtra',
+          tessellate: -1,
+          extrude: 0,
+          visibility: -1
         },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [72.8201321, 18.913101, 0.0]
+        geometry: {
+          type: 'Point',
+          coordinates: [72.8201321, 18.913101, 0.0]
         }
       },
       {
-        "type": "Feature",
-        "properties": {
-          "Name": "TCI Industries Ltd., Narayan A Sawant Road, Near Sasoon Dock & Mukesh Mill, Azad Nagar, Colaba, Mumbai, Maharashtra",
-          "tessellate": -1,
-          "extrude": 0,
-          "visibility": -1
+        type: 'Feature',
+        properties: {
+          Name: 'TCI Industries Ltd., Narayan A Sawant Road, Near Sasoon Dock & Mukesh Mill, Azad Nagar, Colaba, Mumbai, Maharashtra',
+          tessellate: -1,
+          extrude: 0,
+          visibility: -1
         },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [72.8259704, 18.9153796, 0.0]
+        geometry: {
+          type: 'Point',
+          coordinates: [72.8259704, 18.9153796, 0.0]
         }
       },
       {
-        "type": "Feature",
-        "properties": {
-          "Name": "Colaba railway station, Dispensary, Wodehouse Road, Railway Colony, Apollo Bandar, Colaba, Mumbai, Maharashtra",
-          "tessellate": -1,
-          "extrude": 0,
-          "visibility": -1
+        type: 'Feature',
+        properties: {
+          Name: 'Colaba railway station, Dispensary, Wodehouse Road, Railway Colony, Apollo Bandar, Colaba, Mumbai, Maharashtra',
+          tessellate: -1,
+          extrude: 0,
+          visibility: -1
         },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [72.8255264, 18.9182648, 0.0]
+        geometry: {
+          type: 'Point',
+          coordinates: [72.8255264, 18.9182648, 0.0]
         }
       },
       {
-        "type": "Feature",
-        "properties": {
-          "Name": "Chhatrapati Shivaji Maharaj Terminus, Chhatrapati Shivaji Terminus Area, Fort, Mumbai, Maharashtra",
-          "tessellate": -1,
-          "extrude": 0,
-          "visibility": -1
+        type: 'Feature',
+        properties: {
+          Name: 'Chhatrapati Shivaji Maharaj Terminus, Chhatrapati Shivaji Terminus Area, Fort, Mumbai, Maharashtra',
+          tessellate: -1,
+          extrude: 0,
+          visibility: -1
         },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [72.8359673, 18.9398851, 0.0]
+        geometry: {
+          type: 'Point',
+          coordinates: [72.8359673, 18.9398851, 0.0]
         }
       }
     ]
   }
   )
- doc.save()
+  doc.save()
 }
 
-well();
+async function create () {
+  await mongo.connect()
+  const session = mongo.session()({ routeID: '#1', user: 'well' })
+  await session.save()
+}
+
+create()

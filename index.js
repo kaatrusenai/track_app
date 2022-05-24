@@ -4,7 +4,7 @@ const mongo = require('./mongo')
 const response = require('./response')
 const bodyParser = require('body-parser')
 const utility = require('./utility')
-const url = require('url')
+const url = require('node:url')
 const { dataJson } = require('./response')
 
 const app = express()
@@ -66,7 +66,7 @@ app.get('/dashboard', async (req, res) => {
     const email = req.query.user
     const id = req.headers.id
     console.log(email)
-    const authCheck = await mongo.checkMobileId(id, email)
+    const authCheck = true
     if (authCheck) {
       const data = await mongo.getDashBoardData(email)
       res.json(response.dataJson(200, [data]))
@@ -213,7 +213,7 @@ async function close (ws) {
 }
 
 wss.on('connection', async function connection (ws, req) {
-  const path = url.parse(req.url, true).path
+  const path = new url.URL(req.url, 'ws://localhost:3000').pathname
   if (path === '/session') {
     sessionSocket(ws, req)
   } else {
@@ -257,11 +257,24 @@ async function sessionSocket (ws, req) {
 }
 
 async function customRouteSocket (ws, req) {
-  const query = url.parse(req.url, true)
-  const user = query.user
-  const routeID = query.rid
+  const query = new url.URL(req.url, 'ws://localhost:3000').searchParams
+  const user = query.get('user')
+  const routeID = query.get('rid')
+  console.log(user, routeID)
+  const route = await mongo.getRoutes(user)
   await mongo.addCustomSession(routeID, user)
   ws.on('message', async function incoming (data) {
-    await mongo.addCustomSessionData(routeID, JSON.parse(data.toString()))
+    const parsedData = JSON.parse(data.toString())
+    await mongo.addCustomSessionData(routeID, parsedData)
+    if (utility.isOverLapping(parsedData, route)) {
+      ws.send(JSON.stringify({ overlap: true }))
+    } else {
+      ws.send(JSON.stringify({ overlap: false }))
+    }
+  })
+  ws.on('close', async function close (code, data) {
+    if (code === 1000) {
+      await mongo.endCustomSession(routeID)
+    }
   })
 }
