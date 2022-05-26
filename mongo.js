@@ -400,7 +400,6 @@ module.exports = {
 
   getRoutes: async function (user) {
     const res = await User.findOne({ email: user })
-    console.log(res)
     return res.routes
   },
 
