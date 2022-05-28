@@ -65,8 +65,7 @@ app.get('/dashboard', async (req, res) => {
   try {
     const email = req.query.user
     const id = req.headers.id
-    console.log(email)
-    const authCheck = true
+    const authCheck = await mongo.checkMobileId(id, email)
     if (authCheck) {
       const data = await mongo.getDashBoardData(email)
       res.json(response.dataJson(200, [data]))

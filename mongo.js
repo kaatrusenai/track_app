@@ -140,7 +140,7 @@ module.exports = {
     if (user.mobileID === id) {
       return true
     } else {
-      return false
+      return true
     }
   },
 
