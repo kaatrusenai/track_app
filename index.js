@@ -31,11 +31,7 @@ app.get('/signin', async (req, res) => {
           await mongo.addMobileID(mobileID, user)
           res.json(response.dataJson(200, [user]))
         } else {
-          if (user.mobile_id === mobileID) {
-            res.json(response.dataJson(200, [user]))
-          } else {
-            res.json(response.authJson(402))
-          }
+          res.json(response.dataJson(200, [user]))
         }
       } else {
         res.json(response.authJson(401))
