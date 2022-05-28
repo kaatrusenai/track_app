@@ -25,7 +25,6 @@ app.get('/signin', async (req, res) => {
   const mobileID = req.headers.id
   try {
     const user = await mongo.getUser(email)
-    console.log([user])
     if (user != null) {
       if (user.password === password) {
         if (user.mobileID.length === 0) {
