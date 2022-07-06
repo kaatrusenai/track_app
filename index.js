@@ -13,7 +13,7 @@ app.use(bodyParser.json({ limit: '25mb' }))
 app.use(bodyParser.raw())
 
 const server = app.listen(
-  process.env.PORT || 3000,
+  process.env.PORT || 3100,
   async () => await mongo.connect()
 )
 
@@ -22,9 +22,10 @@ const wss = new WebSocket.Server({ server: server })
 app.get('/signin', async (req, res) => {
   const email = req.query.email
   const password = req.query.password
-  const mobileID = req.headers.id
+  const mobileID = req.headers.id ?? ''
   try {
     const user = await mongo.getUser(email)
+    user.mobileID = ''
     if (user != null) {
       if (user.password === password) {
         if (user.mobileID.length === 0) {
@@ -74,6 +75,11 @@ app.get('/dashboard', async (req, res) => {
   } catch {
     res.json(response.dataJson(500))
   }
+})
+
+app.get('/activity', async (req, res) => {
+  const result = await mongo.getActivityData(req.query.user)
+  res.json(dataJson(200, [result]))
 })
 
 app.get('/session_history', async (req, res) => {
@@ -202,6 +208,12 @@ app.get('/device_status', async (req, res) => {
 
 app.get('/routes', async (req, res) => {
   const result = await mongo.getRoutes(req.query.user)
+  res.json(dataJson(200, [result]))
+})
+
+app.get('/custom_session_history', async (req, res) => {
+  const result = await mongo.getCustomSessionHistory(req.query.user)
+  console.log(result)
   res.json(dataJson(200, result))
 })
 
@@ -257,20 +269,18 @@ async function sessionSocket (ws, req) {
 async function customRouteSocket (ws, req) {
   const query = new url.URL(req.url, 'ws://localhost:3000').searchParams
   const user = query.get('user')
-  const routeID = query.get('rid')
+  const routeID = query.get('routeID')
+  const session = query.get('session')
   console.log(user, routeID)
   const route = await mongo.getRoutes(user).then((value) =>
-    value
-      .at(0)
-      .features.at(0)
-      .geometry.coordinates.map((e) => {
-        return { lat: e[1], lng: e[0] }
-      })
+    value.route.features.at(0).geometry.coordinates.map((e) => {
+      return { lat: e[1], lng: e[0] }
+    })
   )
-  await mongo.addCustomSession(routeID, user)
+  await mongo.addCustomSession(routeID, user, session)
   ws.on('message', async function incoming (data) {
     const parsedData = JSON.parse(data.toString())
-    await mongo.addCustomSessionData(routeID, parsedData)
+    await mongo.addCustomSessionData(routeID, session, parsedData)
     if (utility.isOverLapping(parsedData, route)) {
       ws.send(JSON.stringify({ overlap: true }))
     } else {
@@ -279,7 +289,7 @@ async function customRouteSocket (ws, req) {
   })
   ws.on('close', async function close (code, data) {
     if (code === 1000) {
-      await mongo.endCustomSession(routeID)
+      await mongo.endCustomSession(routeID, session)
     }
   })
 }

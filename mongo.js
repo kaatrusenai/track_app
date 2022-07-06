@@ -73,8 +73,11 @@ const customSessionDataSchema = mongoose.Schema(
 
 const customSessionSchema = mongoose.Schema(
   {
-    routeID: { type: String, unique: true },
+    routeID: String,
+    session: String,
     user: String,
+    routeDistance: { type: Number, default: 0 },
+    coveredDistance: { type: Number, default: 0 },
     status: { type: String, default: 'open' },
     started: { type: Date, default: timestamp.toISOString() },
     ended: Date,
@@ -124,7 +127,8 @@ module.exports = {
   },
 
   connect: async function () {
-    mongoose.connect('mongodb://mumbai11:study77%23@3.7.66.36/admin', (err) => {
+    // mongodb://mumbai11:study77%23@3.7.66.36
+    mongoose.connect('mongodb://localhost:27017/admin', (err) => {
       if (err) {
         console.log('mongo connection error: ' + err)
         this.connect()
@@ -171,6 +175,11 @@ module.exports = {
       : userTracking.sessions.filter((session) => session.status === 'closed')
   },
 
+  getCustomSessionHistory: async function (email) {
+    const sessions = await CustomSession.find({ user: email, status: 'closed' })
+    return sessions
+  },
+
   getCoveredArea: async function (startTime, currentUser) {
     const startedAt = new Date(startTime ?? timestamp.toISOString())
     const area = []
@@ -212,6 +221,22 @@ module.exports = {
       distance: userTracking.cumDistance,
       incentive: userTracking.cumIncentives,
       session: userTracking.sessionsCount
+    }
+  },
+
+  getActivityData: async function (email) {
+    const user = await CustomSession.find({ user: email, status: 'closed' })
+    const session = user.length
+    let distance = 0
+    let data = 0
+    user.forEach((v, i) => {
+      distance += v.coveredDistance
+      data += v.data.length
+    })
+    return {
+      sessions: session,
+      distance: distance,
+      data: data
     }
   },
 
@@ -400,32 +425,46 @@ module.exports = {
 
   getRoutes: async function (user) {
     const res = await User.findOne({ email: user })
-    return res.routes
-  },
-
-  addCustomSession: async function (routeID, user) {
-    try {
-      const customSession = CustomSession(
-        {
-          routeID: routeID,
-          user: user
-        }
-      )
-      await customSession.save()
-    } catch {
-
+    const session = await CustomSession.find({ user: user, status: 'closed' }).then(value => value.length + 1)
+    return {
+      session: String(session),
+      route: res.routes.at(0)
     }
   },
 
-  addCustomSessionData: async function (routeID, data) {
-    const customSession = await CustomSession.findOne({ routeID: routeID })
+  addCustomSession: async function (routeID, user, session) {
+    const doc = await CustomSession.find({ routeID: routeID, session: session, user: user })
+    if (doc.length === 0) {
+      try {
+        const customSession = CustomSession(
+          {
+            routeID: routeID,
+            user: user,
+            session: session,
+            coveredDistance: 0,
+            routeDistance: 0
+          }
+        )
+        await customSession.save()
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  },
+
+  addCustomSessionData: async function (routeID, session, data) {
+    const customSession = await CustomSession.findOne({ routeID: routeID, session: session })
+    customSession.coveredDistance = data.coveredDistance
+    customSession.routeDistance = data.routeDistance
+    delete data.coveredDistance
+    delete data.routeDistance
     customSession.data.push(CustomSessionData(data))
     console.log(data)
     await customSession.save()
   },
 
-  endCustomSession: async function (routeID) {
-    const customSession = await CustomSession.findOne({ routeID: routeID })
+  endCustomSession: async function (routeID, session) {
+    const customSession = await CustomSession.findOne({ routeID: routeID, session: session })
     customSession.ended = timestamp.toISOString()
     customSession.status = 'closed'
     await customSession.save()
