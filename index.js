@@ -208,7 +208,7 @@ app.get('/device_status', async (req, res) => {
 
 app.get('/routes', async (req, res) => {
   const result = await mongo.getRoutes(req.query.user)
-  res.json(dataJson(200, [result]))
+  res.json(dataJson(200, result))
 })
 
 app.get('/custom_session_history', async (req, res) => {
