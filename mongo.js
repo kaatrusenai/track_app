@@ -128,7 +128,7 @@ module.exports = {
 
   connect: async function () {
     // mongodb://mumbai11:study77%23@3.7.66.36
-    mongoose.connect('mongodb://mumbai11:study77%23@3.7.66.36/admin', (err) => {
+    mongoose.connect('mongodb://localhost:27017/admin', (err) => {
       if (err) {
         console.log('mongo connection error: ' + err)
         this.connect()
@@ -384,7 +384,7 @@ module.exports = {
         userTracking.sessions.pop()
         await userTracking.save()
       }
-    } catch {}
+    } catch { }
     return null
   },
 
@@ -425,11 +425,12 @@ module.exports = {
 
   getRoutes: async function (user) {
     const res = await User.findOne({ email: user })
-    const session = await CustomSession.find({ user: user, status: 'closed' }).then(value => value.length + 1)
-    return {
-      session: String(session),
-      route: res.routes.at(0)
+    const queryList = []
+    for (let index = 0; index < res.routes.length; index++) {
+      queryList.push(CustomSession.find({ user: user, status: 'closed', routeID: res.routes[index].features[0].properties.name }).then((value) => { return { session: String(value.length + 1), route: res.routes[index] } }))
     }
+    const result = await Promise.all(queryList)
+    return result
   },
 
   addCustomSession: async function (routeID, user, session) {
