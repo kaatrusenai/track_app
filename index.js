@@ -271,12 +271,12 @@ async function customRouteSocket (ws, req) {
   const user = query.get('user')
   const routeID = query.get('routeID')
   const session = query.get('session')
-  console.log(user, routeID)
   const route = await mongo.getRoutes(user).then((value) =>
-    value.route.features.at(0).geometry.coordinates.map((e) => {
+    value.filter(r => r.route.features.at(0).properties.name === routeID))
+    .then(filtered => filtered.at(0).route.features.at(0).geometry.coordinates.map((e) => {
       return { lat: e[1], lng: e[0] }
     })
-  )
+    )
   await mongo.addCustomSession(routeID, user, session)
   ws.on('message', async function incoming (data) {
     const parsedData = JSON.parse(data.toString())

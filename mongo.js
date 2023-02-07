@@ -151,7 +151,7 @@ module.exports = {
   getUser: async function (email) {
     const user = await User.findOne({
       email: email
-    })
+    }, { routes: 0 })
     return user
   },
 
