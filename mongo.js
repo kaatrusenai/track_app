@@ -127,8 +127,8 @@ module.exports = {
   },
 
   connect: async function () {
-    // mongodb://mumbai11:study77%23@3.7.66.36
-    mongoose.connect('mongodb://localhost:27017/admin', (err) => {
+    // mongodb://ma01:suIkwrbsuj@3.109.93.19
+    mongoose.connect('mongodb://ma01:suIkwrbsuj@3.109.93.19/trackappdb', (err) => {
       if (err) {
         console.log('mongo connection error: ' + err)
         this.connect()
